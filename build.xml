@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="all" name="phpunit-selenium-local-remote" basedir=".">
+
+	<property environment="env" />
+
+  <property name="vendor.dir" location="vendor"/>
+  <property name="browser.test.dir" location="browser"/>
+  <property name="reports.build.dir" location="reports"/>
+
+  <target name="browsertest-local" depends="init">
+  	<antcall target="browsertest">
+  		<param name="remote" value="0"/>
+  		<param name="os" value="Linux"/>
+  		<param name="browser" value="*googlechrome"/>
+  		<param name="version" value="18"/>
+  	</antcall>
+  </target>
+
+  <target name="browsertest-local-ff" depends="init">
+  	<antcall target="browsertest">
+  		<param name="remote" value="0"/>
+  		<param name="os" value="Linux"/>
+  		<param name="browser" value="*firefox"/>
+  		<param name="version" value="12"/>
+  	</antcall>
+  </target>
+
+  <target name="browsertest-remote-ie" depends="init">
+  	<antcall target="browsertest">
+  		<param name="remote" value="1"/>
+  		<param name="os" value="Windows 2003"/>
+  		<param name="browser" value="iexplore"/>
+  		<param name="version" value="8."/>
+  	</antcall>
+  </target>
+
+  <target name="browsertest-remote-ff" depends="init">
+  	<antcall target="browsertest">
+  		<param name="remote" value="1"/>
+  		<param name="os" value="Linux"/>
+  		<param name="browser" value="firefox"/>
+  		<param name="version" value="7."/>
+  	</antcall>
+  </target>
+
+  <target name="browsertest-remote-opera" depends="init">
+  	<antcall target="browsertest">
+  		<param name="remote" value="1"/>
+  		<param name="os" value="Windows 2008"/>
+  		<param name="browser" value="opera"/>
+  		<param name="version" value="11."/>
+  	</antcall>
+  </target>
+
+  <target name="browsertest" depends="init">
+      <echo>Starting browser tests with RUN_SAUCE_REMOTE = ${remote}</echo>
+      <exec dir="${browser.test.dir}" executable="${vendor.dir}/bin/phpunit" failonerror="true">
+      	<env key="SAUCE_USER_NAME" value="[your username here]" />
+      	<env key="SAUCE_ACCESS_KEY" value="[your key here]" />
+      	<env key="SAUCE_BASE_URL" value="http://your.test.com" />
+      	<env key="SAUCE_OS" value="${os}" />
+      	<env key="SAUCE_BROWSER" value="${browser}" />
+      	<env key="SAUCE_BROWSER_VERSION" value="${version}" />
+      	<env key="SAUCE_RUN_REMOTE" value="${remote}" />
+          <arg line="--log-junit ${reports.build.dir}/sauce-report-ff10.xml" />
+      </exec>
+      <echo>Finished browser tests</echo>
+  </target>
+
+</project>
